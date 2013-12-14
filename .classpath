@@ -7,5 +7,16 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl_applet-2.9.0/applet/basic/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl-2.9.0/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl_applet-2.9.0/applet/basic/lwjgl_util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl-2.9.0/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/martin/JavaDevelopment/APIs/slick/lib/slick.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
