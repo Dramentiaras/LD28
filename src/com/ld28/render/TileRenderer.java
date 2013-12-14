@@ -16,7 +16,7 @@ public class TileRenderer {
 	
 public void render() {
 		
-		int h = Tile.SIZE / 2;
+		int h = Tile.SIZE;
 		
 		float tw = TextureLibrary.get(Tile.TILESET + ":" + tile.index).getWidth() / 2 * 0;
 		float th = TextureLibrary.get(Tile.TILESET + ":" + tile.index).getWidth() / 2 * 0;
@@ -26,9 +26,9 @@ public void render() {
 		GL11.glBegin(GL11.GL_QUADS);
 		{
 			
-			GL11.glTexCoord2f(1 + tw, 0 + th); GL11.glVertex2f(h, -h);
-			GL11.glTexCoord2f(0 + tw, 0 + th); GL11.glVertex2f(-h, -h);
-			GL11.glTexCoord2f(0 + tw, 1 + th); GL11.glVertex2f(-h, h);
+			GL11.glTexCoord2f(1 + tw, 0 + th); GL11.glVertex2f(h, 0);
+			GL11.glTexCoord2f(0 + tw, 0 + th); GL11.glVertex2f(0, 0);
+			GL11.glTexCoord2f(0 + tw, 1 + th); GL11.glVertex2f(0, h);
 			GL11.glTexCoord2f(1 + tw, 1 + th); GL11.glVertex2f(h, h);
 			
 		}

@@ -11,38 +11,78 @@ import com.ld28.base.GLSettings;
 import com.ld28.controls.Controls;
 import com.ld28.controls.GameControls;
 import com.ld28.entity.Entity;
+import com.ld28.entity.EntityPlayer;
 import com.ld28.input.Input;
 import com.ld28.level.Level;
+import com.ld28.menu.Menu;
 import com.ld28.texture.TextureLibrary;
 
 public class GameHandler {
 
-	private ArrayList<Entity> entities;
+	public ArrayList<Entity> entities;
 	private ArrayList<Entity> removals;
 	private Controls controls;
 	public Level level;
+	
+	private boolean paused;
+	
+	private int curLevel = 0;
+	
+	public static final int MENU = 0, INGAME = 1;
+	
+	private int state = MENU;
+	
+	public EntityPlayer player;
 	
 	public GameHandler() {
 		
 		GLSettings.initGL();
 		
-		TextureLibrary.loadAndSubdivide("textures/level/tileset.png", 16, 16, 16, 16);
-		
-		setLevel(new Level(30, 30, this));
-		
-		entities = new ArrayList<Entity>();
-		removals = new ArrayList<Entity>();
-
-		setControls(new GameControls(this));
+		loadTextures();
+		LevelLoader.loadLevels(this);
 		
 		loop();
 		
 		clean();
 	}
 	
+	public void startGame() {
+		
+		state = INGAME;
+		
+		entities = new ArrayList<Entity>();
+		removals = new ArrayList<Entity>();
+		
+		setLevel(LevelLoader.getLevel(curLevel, this));
+		level.spawnPlayer();
+
+		setControls(new GameControls(this));
+	}
+	
+	public void enterMenu(Menu menu) {
+		
+		state = MENU;
+	}
+	
+	private void loadTextures() {
+		
+		TextureLibrary.loadAndSubdivide("textures/level/tileset.png", 16, 16, 16, 16);
+		TextureLibrary.loadAndSubdivide("textures/player/player.png", 8, 8, 16, 16);
+	}
+	
 	public void addEntity(Entity entity) {
 		
 		entities.add(entity);
+	}
+	
+	public void pause() {
+		
+		paused = true;
+	}
+	
+	public void unpause() {
+		
+		paused = false;
 	}
 	
 	public void flagForRemoval(Entity entity) {
@@ -55,15 +95,32 @@ public class GameHandler {
 		this.level = level;
 	}
 	
+	public void resetLevel() {
+		
+		entities = new ArrayList<Entity>();
+		removals = new ArrayList<Entity>();
+		
+		setLevel(LevelLoader.getLevel(curLevel, this));
+		level.spawnPlayer();
+
+		setControls(new GameControls(this));
+	}
+	
 	public void render() {
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 	
-		level.render();
-		
-		for (Entity e : entities) {
+		if (state == INGAME) {
+			level.render();
 			
-			e.getEntityRenderer().render();
+			for (Entity e : entities) {
+				
+				e.getEntityRenderer().render();
+			}
+		}
+		else if (state == MENU) {
+			
+			
 		}
 	}
 	
@@ -78,6 +135,8 @@ public class GameHandler {
 			
 			entities.remove(e);
 		}
+		
+		level.update();
 		
 		removals = new ArrayList<Entity>();
 		

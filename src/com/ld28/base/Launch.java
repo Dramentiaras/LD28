@@ -14,7 +14,7 @@ public class Launch {
 		
 		try {
 			
-			Display.setDisplayMode(new DisplayMode(800, 600));
+			Display.setDisplayMode(new DisplayMode(800, 608));
 			
 			Display.create();
 			Mouse.create();

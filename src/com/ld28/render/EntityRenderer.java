@@ -8,12 +8,16 @@ import com.ld28.texture.TextureLibrary;
 public class EntityRenderer {
 
 	protected Entity entity;
+	public int frame = 1;
 	
 	private float r = 1f, g = 1f, b = 1f;
 	private float xScale, yScale;
 	private float rotation;
 	private boolean textured = false;
+	private boolean subdivided = false;
 	private String name = "";
+	
+	private boolean xFlip, yFlip;
 	
 	public EntityRenderer(Entity entity) {
 		
@@ -28,7 +32,7 @@ public class EntityRenderer {
 		{
 			
 			GL11.glTranslatef(entity.x, entity.y, 0);
-			GL11.glScalef(xScale, yScale, 0);
+			GL11.glScalef(xFlip ? xScale * -1:xScale, yFlip ? yScale * -1:yScale, 0);
 			GL11.glRotatef(rotation, 0, 0, 1f);
 			
 			GL11.glColor3f(r, g, b);
@@ -38,21 +42,20 @@ public class EntityRenderer {
 			
 			if (!textured) GL11.glDisable(GL11.GL_TEXTURE_2D);
 			
+			String n = subdivided ? name + ":" + frame:name;
+			
+			if (textured) 					
+				TextureLibrary.bind(n);
 			
 			GL11.glBegin(GL11.GL_QUADS);
 			{
 				
 				if (textured) {
 					
-					float tw = .5f / TextureLibrary.get(name).getWidth();
-					float th = .5f / TextureLibrary.get(name).getHeight();
-					
-					TextureLibrary.bind(name);
-					
-					GL11.glTexCoord2f(1 + tw, 0 + th); GL11.glVertex2f(w, -h);
-					GL11.glTexCoord2f(0 + tw, 0 + th); GL11.glVertex2f(-w, -h);
-					GL11.glTexCoord2f(0 + tw, 1 + th); GL11.glVertex2f(-w, h);
-					GL11.glTexCoord2f(1 + tw, 1 + th); GL11.glVertex2f(w, h);
+					GL11.glTexCoord2f(1, 0); GL11.glVertex2f(w, -h);
+					GL11.glTexCoord2f(0 , 0); GL11.glVertex2f(-w, -h);
+					GL11.glTexCoord2f(0, 1); GL11.glVertex2f(-w, h);
+					GL11.glTexCoord2f(1, 1); GL11.glVertex2f(w, h);
 				}
 				else {
 					
@@ -79,7 +82,17 @@ public class EntityRenderer {
 		this.textured = textured;
 	}
 	
-	public String getTexturePath() {
+	public boolean isSubdivided() {
+		
+		return subdivided;
+	}
+	
+	public void setSubdivided(boolean subdivided) {
+		
+		this.subdivided = subdivided;
+	}
+	
+	public String getTextureName() {
 		
 		return name;
 	}
@@ -109,6 +122,26 @@ public class EntityRenderer {
 	public void setScaleX(float scale) {
 		
 		xScale = scale;
+	}
+	
+	public void flipX(boolean flip) {
+		
+		xFlip = flip;
+	}
+	
+	public boolean isXFlipped() {
+		
+		return xFlip;
+	}
+	
+	public void flipY(boolean flip) {
+		
+		yFlip = flip;
+	}
+	
+	public boolean isYFlipped() {
+		
+		return yFlip;
 	}
 	
 	public float getScaleX() {
