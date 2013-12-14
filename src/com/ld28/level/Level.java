@@ -1,12 +1,14 @@
 package com.ld28.level;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
 import com.ld28.base.GLSettings;
 import com.ld28.entity.Entity;
+import com.ld28.entity.EntityGuard;
 import com.ld28.entity.EntityPlayer;
 import com.ld28.handler.GameHandler;
 import com.ld28.physics.Collision;
@@ -26,6 +28,8 @@ public class Level {
 	private int playerYSpawn;
 
 	public float xOffset, yOffset;
+	
+	private ArrayList<int[]> patrols = new ArrayList<int[]>();
 	
 	public Level(int width, int height, GameHandler game) {
 		
@@ -60,6 +64,30 @@ public class Level {
 		
 		playerXSpawn = x;
 		playerYSpawn = y;
+	}
+	
+	public void addPatrol(int x1, int y1, int x2, int y2) {
+		
+		patrols.add(new int[] {x1, y1, x2, y2});
+	}
+	
+	private void deployPatrols() {
+		
+		for (int[] i : patrols) {
+			
+			EntityGuard guard;
+			
+			if (i[0] != i[2]) {
+				
+				guard = new EntityGuard(i[0], i[1], i[2], game);
+			}
+			else {
+				
+				guard = new EntityGuard(i[0], i[1], i[2], i[3], game);
+			}
+			
+			game.addEntity(guard);
+		}
 	}
 	
 	public void setBlock(int x1, int y1, int x2, int y2, int id) {
@@ -125,7 +153,7 @@ public class Level {
 				for (int y = 0; y <= level[x].length; y++) {
 					
 					Rectangle r1 = new Rectangle(x * Tile.SIZE, y * Tile.SIZE, Tile.SIZE, Tile.SIZE);
-					Rectangle r2 = new Rectangle((int) (e.x - e.colWidth / 2), (int) (e.y - e.colHeight / 2), (int) e.colWidth, (int) e.colHeight);
+					Rectangle r2 = new Rectangle((int) (e.x + e.motionX - e.colWidth / 2), (int) (e.y + e.motionY - e.colHeight / 2), (int) e.colWidth, (int) e.colHeight);
 					
 					if (Collision.isColliding(r1, r2)) {
 						
@@ -166,5 +194,6 @@ public class Level {
 	public void reset() {
 		
 		keys = new boolean[256];
+		deployPatrols();
 	}
 }

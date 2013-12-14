@@ -15,8 +15,11 @@ import com.ld28.entity.Entity;
 import com.ld28.entity.EntityPlayer;
 import com.ld28.input.Input;
 import com.ld28.level.Level;
+import com.ld28.level.LevelLoader;
 import com.ld28.menu.MainMenu;
 import com.ld28.menu.Menu;
+import com.ld28.menu.VictoryMenu;
+import com.ld28.physics.Collision;
 import com.ld28.render.FontRenderer;
 import com.ld28.texture.TextureLibrary;
 
@@ -26,13 +29,21 @@ public class GameHandler {
 	private ArrayList<Entity> removals;
 	private Controls controls;
 	public Level level;
+	private float pane1, pane2;
 	
 	public Menu menu;
 	
-	private boolean paused;
+	private boolean transitioning = false;
 	private boolean renderGame = false;
+	private String transitioningMessage = "";
 	
-	private int curLevel = 0;
+	private int ticksTransComplete = 0;
+	private int transTask = -1;
+	private Menu transMenu = null;
+	
+	public static final int LEVEL_SWITCH = 0, GAME_START = 1, MENU_SWITCH = 2;
+	
+	private int curLevel;
 	
 	public static final int MENU = 0, INGAME = 1;
 	
@@ -44,6 +55,9 @@ public class GameHandler {
 		
 		GLSettings.initGL();
 		
+		pane1 = GLSettings.WIDTH / 2 + 4;
+		pane2 = GLSettings.WIDTH / 2 + 4;
+		
 		loadTextures();
 		loadAudio();
 		LevelLoader.loadLevels(this);
@@ -51,7 +65,7 @@ public class GameHandler {
 		SoundSystem.initAL();
 		FontRenderer.init();
 		
-		enterMenu(new MainMenu(this));
+		transition(new MainMenu(this));
 		
 		loop();
 		
@@ -65,22 +79,34 @@ public class GameHandler {
 	
 	public void startGame() {
 		
-		state = INGAME;
+		transition(GAME_START);
+	}
+	
+	public void transition(int task) {
 		
-		menu = null;
+		this.transTask = task;
 		
-		entities = new ArrayList<Entity>();
-		removals = new ArrayList<Entity>();
+		transitioning = true;
+		ticksTransComplete = 0;
+	}
+	
+	public void transition(Menu menu) {
 		
-		setLevel(LevelLoader.getLevel(curLevel, this));
-		level.reset();
-		level.spawnPlayer();
-
-		setControls(new GameControls(this));
+		transition(MENU_SWITCH);
+		transMenu = menu;
 	}
 	
 	public void nextLevel() {
 		
+		Level lvl = LevelLoader.getLevel(curLevel + 1, this);
+		
+		if (lvl == null) {
+			
+			transition(new VictoryMenu(this));
+			return;
+		}
+		
+		transition(LEVEL_SWITCH);
 	}
 	
 	public void enterMenu(Menu menu) {
@@ -104,12 +130,16 @@ public class GameHandler {
 		TextureLibrary.load("textures/logo.png");
 		
 		TextureLibrary.loadAndSubdivide("textures/level/tileset.png", 16, 16, 16, 16);
-		TextureLibrary.loadAndSubdivide("textures/player/player.png", 1, 8, 16, 16);
+		TextureLibrary.loadAndSubdivide("textures/entity/human.png", 1, 8, 16, 16);
 	}
 	
 	private void loadAudio() {
 		
-		
+		SoundSystem.load("sounds/player/death0.wav");
+		SoundSystem.load("sounds/player/death1.wav");
+		SoundSystem.load("sounds/player/laser.wav");
+		SoundSystem.load("sounds/player/laser_hit.wav");
+		SoundSystem.load("sounds/guard/guard_death.wav");
 	}
 	
 	public void addEntity(Entity entity) {
@@ -142,7 +172,7 @@ public class GameHandler {
 	public void render() {
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-	
+		
 		if (state == INGAME || renderGame) {
 			
 			level.render();
@@ -156,30 +186,187 @@ public class GameHandler {
 			
 			menu.render();
 		}
+		
+		if (transitioning) {
+			
+			GL11.glPushMatrix();
+			{
+
+				GL11.glColor3f(0f, 0f, 0f);
+				
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				
+				GL11.glBegin(GL11.GL_QUADS);
+				{
+					
+					GL11.glVertex2f(0, 0);
+					GL11.glVertex2f(0, GLSettings.HEIGHT);
+					GL11.glVertex2f(pane1, GLSettings.HEIGHT);
+					GL11.glVertex2f(pane1, 0);
+					
+				}
+				GL11.glEnd();
+			}
+			GL11.glPopMatrix();
+			
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(GLSettings.WIDTH - pane2, 0, 0);
+				
+				GL11.glBegin(GL11.GL_QUADS);
+				{
+					
+					GL11.glVertex2f(0, 0);
+					GL11.glVertex2f(0, GLSettings.HEIGHT);
+					GL11.glVertex2f(pane2, GLSettings.HEIGHT);
+					GL11.glVertex2f(pane2, 0);
+					
+				}
+				GL11.glEnd();
+				
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+			}
+			GL11.glPopMatrix();
+			
+			if (ticksTransComplete < 90 && ticksTransComplete > 30) {
+				
+				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(transitioningMessage) / 2,
+						GLSettings.HEIGHT / 2 - FontRenderer.getStringHeight(transitioningMessage) / 2, transitioningMessage);
+			}
+		}
 	}
 	
 	public void update() {
 		
-		if (state == INGAME) {
-			
-			for (Entity e : entities) {
+		if (!transitioning) {
+			if (state == INGAME) {
 				
-				e.update();
+				for (Entity e : entities) {
+					
+					e.update();
+				}
+				
+				for (Entity e : entities) {
+					
+					for (Entity e1 : entities) {
+						
+						if (e != e1) {
+							
+							if (Collision.isColliding(e, e1) && !e.isDead() && !e1.isDead()) {
+								
+								e.onEntityCollision(e1);
+							}
+						}
+					}
+				}
+				
+				for (Entity e : removals) {
+					
+					entities.remove(e);
+				}
+				
+				removals = new ArrayList<Entity>();
+				
+				level.update();
+			}
+	
+			controls.check();
+				
+			Input.update();
+		}
+		else {
+			
+			if (pane1 <= GLSettings.WIDTH / 2 && ticksTransComplete == 0) {
+				
+				pane1 += 8;
 			}
 			
-			for (Entity e : removals) {
+			if (pane2 <= GLSettings.WIDTH / 2 && ticksTransComplete == 0) {
 				
-				entities.remove(e);
+				pane2 += 8;
 			}
 			
-			level.update();
+			if (pane1 > GLSettings.WIDTH / 2 && pane2 > GLSettings.WIDTH / 2 && ticksTransComplete < 120) {
+				
+				if (ticksTransComplete == 0) {
+					execTransitionTask();
+				}
+				
+				ticksTransComplete++;
+			}
+			else if (ticksTransComplete >= 120) {
+				
+				if (pane1 > 0) {
+					
+					pane1 -= 8;
+				}
+				
+				if (pane2 > 0) {
+					
+					pane2 -= 8;
+				}
+				
+				if (pane1 <= 0 && pane2 <= 0) {
+					
+					transitioning = false;
+					transitioningMessage = "";
+				}
+			}
+		}
+	}
+	
+	public void execTransitionTask() {
+		
+		if (transTask == LEVEL_SWITCH) {
 			
+			entities = new ArrayList<Entity>();
 			removals = new ArrayList<Entity>();
+			Level lvl = LevelLoader.getLevel(++curLevel, this);
+			
+			if (lvl == null) {
+				
+				
+				enterMenu(new VictoryMenu(this));
+				transitioning = false;
+			}
+			else {
+				
+				setLevel(lvl);
+				
+				transitioningMessage = "Level " + (curLevel + 1);
+				
+				level.reset();
+				level.spawnPlayer();
+				
+				setControls(new GameControls(this));
+			}
 		}
 		
-		controls.check();
+		if (transTask == GAME_START) {
+			
+			state = INGAME;
+			
+			menu = null;
+			curLevel = 2;
+			
+			entities = new ArrayList<Entity>();
+			removals = new ArrayList<Entity>();
+			
+			setLevel(LevelLoader.getLevel(curLevel, this));
+			
+			transitioningMessage = "Level " + (curLevel + 1); 
+			
+			level.reset();
+			level.spawnPlayer();
+
+			setControls(new GameControls(this));
+		}
 		
-		Input.update();
+		if (transTask == MENU_SWITCH) {
+			
+			transitioningMessage = "Loading...";
+			enterMenu(transMenu);
+		}
 	}
 	
 	public void setControls(Controls ctrls) {
@@ -204,5 +391,7 @@ public class GameHandler {
 		Display.destroy();
 		Mouse.destroy();
 		Keyboard.destroy();
+		
+		SoundSystem.destroy();
 	}
 }

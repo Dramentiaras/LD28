@@ -13,8 +13,8 @@ public class Tile {
 	
 	public static final Tile air = new Tile(0, 0).setShouldRender(false).setObstacle(false);
 	public static final Tile wall = new Tile(1, 0).setObstacle(true);
-	public static final Tile doorClosed = new Tile(2, 1);
-	public static final Tile doorOpen = new Tile(3, 2);
+	public static final Tile doorClosed = new Tile(2, 1).setObstacle(false);
+	public static final Tile doorOpen = new Tile(3, 2).setObstacle(false);
 	
 	public int id, index;
 	private TileRenderer renderer;

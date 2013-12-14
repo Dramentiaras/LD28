@@ -15,6 +15,7 @@ public class PauseMenu extends Menu {
 		super(game);
 		
 		addMenuObject("resume");
+		addMenuObject("restart");
 		addMenuObject("options");
 		addMenuObject("main menu");
 	}
@@ -35,7 +36,13 @@ public class PauseMenu extends Menu {
 		
 		if (getObject(index) == "main menu") {
 			
-			game.enterMenu(new MainMenu(game));
+			game.transition(new MainMenu(game));
+		}
+		
+		if (getObject(index) == "restart") {
+			
+			game.resetLevel();
+			game.enterMenu(null);
 		}
 	}
 	

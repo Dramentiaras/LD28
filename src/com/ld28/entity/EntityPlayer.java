@@ -1,163 +1,161 @@
 package com.ld28.entity;
 
+import org.lwjgl.input.Keyboard;
+
+import com.ld28.audio.SoundSystem;
 import com.ld28.handler.GameHandler;
 import com.ld28.level.Level;
 import com.ld28.tile.Tile;
 
-public class EntityPlayer extends Entity {
+public class EntityPlayer extends EntityHuman {
 	
-	public float acceleration = .05f;
-	public float xAccelerate, yAccelerate;
+	public static final float MAX_SPEED = 2f;
 	
-	private int animateTicks;
-	private boolean walkFlip = false;
-	
-	public static final float MAX_SPEED = 3.0f;
+	private boolean firing = false;
+	private int ticksDead;
+	private int ticksFiring;
 	
 	public EntityPlayer(float x, float y, GameHandler game) {
 		
-		super(x, y, 16, 16, game);
-		colWidth = colHeight = 12;
-		
-		getEntityRenderer().setTextured(true);
-		getEntityRenderer().setSubdivided(true);
-		getEntityRenderer().setTextureName("player");
+		super(x, y, game);
 	}
-
+	
 	@Override
 	public void update() {
 		
-		if (xAccelerate != motionX) {
-			
-			if (xAccelerate > motionX) {
-				
-				if (motionX + acceleration > xAccelerate) {
-					
-					motionX = xAccelerate;
-				}
-				else {
-					
-					motionX += acceleration;
-				}
-			}
-			else {
-				
-				if (motionX - acceleration < xAccelerate) {
-					
-					motionX = xAccelerate;
-				}
-				else {
-					
-					motionX -= acceleration;
-				}
-			}
-		}
-		
-		if (yAccelerate != motionY) {
-			
-			if (yAccelerate > motionY) {
-				
-				if (motionY + acceleration > yAccelerate) {
-					
-					motionY = yAccelerate;
-				}
-				else {
-					
-					motionY += acceleration;
-				}
-			}
-			else {
-				
-				if (motionY - acceleration < yAccelerate) {
-					
-					motionY = yAccelerate;
-				}
-				else {
-					
-					motionY -= acceleration;
-				}
-			}
-		}
-		
-		animate();
-		
 		super.update();
+		
+		if (isDead()) {
+			
+			motionX = motionY = 0;
+			
+			if (ticksDead > 120) {
+				
+				game.resetLevel();
+			}
+			
+			ticksDead++;
+		}
+		
+		if (firing) {
+			
+			motionX = motionY = 0;
+			
+			if (ticksFiring > 30) {
+				
+				firing = false;
+			}
+			
+			ticksFiring++;
+		}
 	}
 	
+	@Override
 	public void animate() {
 		
-		int frame = getEntityRenderer().frame;
+		super.animate();
 		
-		if (motionX != 0 || motionY != 0) {
+		if (isDead()) {
 			
-			if (animateTicks > 15 || frame == 0 && animateTicks > 5) {
+			getEntityRenderer().frame = baseFrame + 3;
+		}
+		
+		if (firing) {
 			
-				getEntityRenderer().flipX(motionX < 0);
-					
-				if (frame == 0) getEntityRenderer().frame = 1;
-				else if (frame == 1 && !walkFlip){
-						
-					walkFlip = true;
-					getEntityRenderer().flipY(true);
-				}
-				else {
-					
-					walkFlip = false;
-					getEntityRenderer().flipY(false);
-					getEntityRenderer().frame = 0;
-				}
-					
-				animateTicks = 0;
-			}
+			getEntityRenderer().frame = baseFrame + 2;
+		}
+	}
+	
+	public void fire() {
+		
+		firing = true;
+		SoundSystem.play("laser");
+		
+		ticksFiring = 0;
+		
+		float rot = getEntityRenderer().getRotation();
+		
+		EntityLaser laser;
+		
+		if (rot == 0 || rot == 180) {
+			
+			laser = new EntityLaser(0, 0, (rot == 0 ? 8f:-8f), 0f, game);
 		}
 		else {
 			
-			walkFlip = false;
-			getEntityRenderer().flipY(false);
-			
-			getEntityRenderer().frame = 0;
+			laser = new EntityLaser(0, 0, 0f, (rot == 90 ? 8f:-8f), game);
 		}
 		
-		if (motionX > 0) {
+		if (rot == 0) {
 			
-			getEntityRenderer().setRotation(0);
+			laser.x = x + colWidth / 2 + laser.width / 2 + 1;
+			laser.y = y;
 		}
-		if (motionX < 0) {
+		else if (rot == 180) {
 			
-			getEntityRenderer().setRotation(180);
+			laser.x = x - colWidth / 2 - laser.width / 2 - 1;
+			laser.y = y;
 		}
-		else if (motionY > 0) {
+		else if (rot == 90) {
 			
-			getEntityRenderer().setRotation(90);
+			laser.x = x;
+			laser.y = y + colHeight / 2 + laser.height / 2 + 1;
 		}
-		else if (motionY < 0) {
+		else if (rot == 270) {
 			
-			getEntityRenderer().setRotation(270);
+			laser.x = x;
+			laser.y = y - colHeight / 2 - laser.height / 2 - 1;
 		}
 		
-		animateTicks++;
+		game.addEntity(laser);
 	}
 	
-	public void accelerateXTo(float speed) {
+	@Override
+	public void onEntityCollision(Entity entity) {
 		
-		xAccelerate = speed;
-	}
-	
-	public void accelerateYTo(float speed) {
-		
-		yAccelerate = speed;
-	}
+		if (entity instanceof EntityGuard) {
+			
+			die();
+		}
+ 	}
 	
 	@Override
 	public void onTileCollision(int x, int y, int id, Level level) {
 		
-		if (id == Tile.wall.id) {
-			
-			game.resetLevel();
+		if (!isDead()) {
+			if (id == Tile.wall.id) {
+				
+				if (motionX > 0) {
+					
+					game.level.setKeyPressed(Keyboard.KEY_D);
+					motionX = 0;
+				}
+				else if (motionX < 0) {
+					
+					game.level.setKeyPressed(Keyboard.KEY_A);
+					motionX = 0;
+				}
+				else if (motionY > 0) {
+					
+					game.level.setKeyPressed(Keyboard.KEY_S);
+					motionY = 0;
+				}
+				else if (motionY < 0) {
+					
+					game.level.setKeyPressed(Keyboard.KEY_W);
+					motionY = 0;
+				}
+			}
+			if (id == Tile.doorOpen.id) {
+				
+				game.nextLevel();
+			}
 		}
-		if (id == Tile.doorOpen.id) {
-			
-			game.nextLevel();
-		}
+	}
+	
+	public void die() {
+		
+		setDead(true);
+		SoundSystem.play("death" + random.nextInt(2));
 	}
 }

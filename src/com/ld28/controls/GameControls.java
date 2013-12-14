@@ -22,35 +22,40 @@ public class GameControls implements Controls {
 		if (Input.isKeyDown(Keyboard.KEY_D) && !game.level.isKeyPressed(Keyboard.KEY_D)) {
 			
 			game.player.accelerateXTo(EntityPlayer.MAX_SPEED);
+			game.player.accelerateYTo(0);
 		}
 		
 		else if (Input.isKeyDown(Keyboard.KEY_A) && !game.level.isKeyPressed(Keyboard.KEY_A)) {
 			
 			game.player.accelerateXTo(-EntityPlayer.MAX_SPEED);
+			game.player.accelerateYTo(0);
 		}
 		
-		else {
-			
-			game.player.accelerateXTo(0);
-		}
-		
-		if (Input.isKeyDown(Keyboard.KEY_W) && !game.level.isKeyPressed(Keyboard.KEY_W)) {
+		else if (Input.isKeyDown(Keyboard.KEY_W) && !game.level.isKeyPressed(Keyboard.KEY_W)) {
 			
 			game.player.accelerateYTo(-EntityPlayer.MAX_SPEED);
+			game.player.accelerateXTo(0);
 		}
 		
 		else if (Input.isKeyDown(Keyboard.KEY_S) && !game.level.isKeyPressed(Keyboard.KEY_S)) {
 			
 			game.player.accelerateYTo(EntityPlayer.MAX_SPEED);
+			game.player.accelerateXTo(0);
 		}
 		else {
 			
 			game.player.accelerateYTo(0);
+			game.player.accelerateXTo(0);
 		}
 		
 		if (Input.isKeyPressed(Keyboard.KEY_ESCAPE)) {
 			
 			game.enterMenu(new PauseMenu(game));
+		}
+		
+		if (Input.isKeyPressed(Keyboard.KEY_SPACE) && !game.level.isKeyPressed(Keyboard.KEY_SPACE)) {
+			
+			game.player.fire();
 		}
 		
 		if (Input.isKeyReleased(Keyboard.KEY_D)) {
@@ -71,6 +76,11 @@ public class GameControls implements Controls {
 		if (Input.isKeyReleased(Keyboard.KEY_W)) {
 			
 			game.level.setKeyPressed(Keyboard.KEY_W);
+		}
+		
+		if (Input.isKeyReleased(Keyboard.KEY_SPACE)) {
+			
+			game.level.setKeyPressed(Keyboard.KEY_SPACE);
 		}
 	}
 }

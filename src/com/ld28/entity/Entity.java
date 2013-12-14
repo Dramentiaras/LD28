@@ -10,6 +10,7 @@ public class Entity {
 	public float colWidth, colHeight;
 	public static final float DEFAULT_SIZE = 16f;
 	public int frame;
+	private boolean dead;
 	
 	protected GameHandler game;
 	
@@ -51,6 +52,16 @@ public class Entity {
 	public void onTileCollision(int x, int y, int id, Level level) {
 		
 		
+	}
+	
+	public boolean isDead() {
+		
+		return dead;
+	}
+	
+	public void setDead(boolean dead) {
+		
+		this.dead = dead;
 	}
 	
 	public EntityRenderer getEntityRenderer() {

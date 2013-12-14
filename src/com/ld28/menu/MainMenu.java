@@ -12,6 +12,7 @@ import com.ld28.texture.TextureLibrary;
 public class MainMenu extends Menu {
 
 	private InfoMenu instructions;
+	private InfoMenu credits;
 	
 	public MainMenu(GameHandler game) {
 		
@@ -20,16 +21,23 @@ public class MainMenu extends Menu {
 		addMenuObject("start");
 		addMenuObject("instructions");
 		addMenuObject("options");
+		addMenuObject("credits");
 		
 		instructions = new InfoMenu(game, this);
 		
 		instructions.setText("In 4 directions you have to get "
-				+ "to the end of the level without touching \n"
-				+ "anything except the goal. The twist is that you can only "
+				+ "to the end of the level without dying. \n"
+				+ "The twist is that you can only "
 				+ "press the same \nbutton once per level. \n"
 				+ "\nThe controls are simple. Use <WASD> to move"
-				+ " and <SPACE> to fire your laser. \n \n"
+				+ " and <SPACE> to fire your laser. \n"
+				+ "Avoid guards or shoot them with your laser.\n \n"
 				+ "But remember, you can only use the same button once in every level!");
+		
+		credits = new InfoMenu(game, this);
+		
+		credits.setText("Everything: Martin Jirlow a.k.a Dramentiaras\n"
+				+ "Twitter: @Martinoinez.");
 	}
 	
 	@Override
@@ -42,6 +50,11 @@ public class MainMenu extends Menu {
 		if (getObject(index) == "instructions") {
 			
 			game.enterMenu(instructions);
+		}
+		
+		if (getObject(index) == "credits") {
+			
+			game.enterMenu(credits);
 		}
 	}
 	
