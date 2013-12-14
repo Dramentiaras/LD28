@@ -80,82 +80,63 @@ public class EntityPlayer extends Entity {
 			}
 		}
 		
+		animate();
+		
+		super.update();
+	}
+	
+	public void animate() {
+		
 		int frame = getEntityRenderer().frame;
 		
-		if (motionX != 0) {
+		if (motionX != 0 || motionY != 0) {
 			
-			if (animateTicks > 25) {
+			if (animateTicks > 15 || frame == 0 && animateTicks > 5) {
 			
 				getEntityRenderer().flipX(motionX < 0);
 					
 				if (frame == 0) getEntityRenderer().frame = 1;
-				else {
+				else if (frame == 1 && !walkFlip){
 						
+					walkFlip = true;
+					getEntityRenderer().flipY(true);
+				}
+				else {
+					
+					walkFlip = false;
+					getEntityRenderer().flipY(false);
 					getEntityRenderer().frame = 0;
 				}
 					
 				animateTicks = 0;
 			}
 		}
-		else if (motionY != 0) {
-			
-			if (animateTicks > 25) {
-				
-				getEntityRenderer().flipX(false);
-				
-				if (motionY > 0) {
-					
-					if (frame == 8) {
-						
-						getEntityRenderer().frame = 9;
-					}
-					else if (frame == 9 && !walkFlip) {
-						
-						getEntityRenderer().flipX(true);
-						walkFlip = true;
-					}
-					else {
-						
-						walkFlip = false;
-						getEntityRenderer().flipX(false);
-						
-						getEntityRenderer().frame = 8;
-					}
-				}
-				else {
-					
-					if (frame == 16) {
-						
-						getEntityRenderer().frame = 17;
-					}
-					else if (frame == 17 && !walkFlip) {
-						
-						getEntityRenderer().flipX(true);
-						walkFlip = true;
-					}
-					else {
-						
-						walkFlip = false;
-						getEntityRenderer().flipX(false);
-						
-						getEntityRenderer().frame = 16;
-					}
-				}
-				
-				animateTicks = 0;
-			}
-		}
 		else {
 			
 			walkFlip = false;
-			getEntityRenderer().flipX(false);
+			getEntityRenderer().flipY(false);
 			
 			getEntityRenderer().frame = 0;
 		}
 		
-		animateTicks++;
+		if (motionX > 0) {
+			
+			getEntityRenderer().setRotation(0);
+		}
+		if (motionX < 0) {
+			
+			getEntityRenderer().setRotation(180);
+		}
+		else if (motionY > 0) {
+			
+			getEntityRenderer().setRotation(90);
+		}
+		else if (motionY < 0) {
+			
+			getEntityRenderer().setRotation(270);
+		}
 		
-		super.update();
+		animateTicks++;
 	}
 	
 	public void accelerateXTo(float speed) {
