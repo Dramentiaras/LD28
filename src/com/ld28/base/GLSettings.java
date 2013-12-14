@@ -14,8 +14,8 @@ public class GLSettings {
 		
 		GL11.glClearColor(.35f, .35f, .35f, 0f);
 		
-		WIDTH = Display.getWidth();
-		HEIGHT = Display.getHeight();
+		WIDTH = 800;
+		HEIGHT = 600;
 		
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());

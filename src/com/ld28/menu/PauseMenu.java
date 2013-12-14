@@ -79,21 +79,6 @@ public class PauseMenu extends Menu {
 		}
 		GL11.glPopMatrix();
 		
-		RenderUtil.renderLogo(200, 0);
-		
-		for (int i = 0; i < getObjectCount(); i++) {
-			
-			String s = getObject(i);
-			
-			if (i == getSelectedIndex()) {
-				
-				s = "< " + s + " >";
-				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s, SELECTED_COLOR);
-			}
-			else {
-				
-				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s);
-			}
-		}
+		RenderUtil.renderStandardMenu(this);
 	}
 }

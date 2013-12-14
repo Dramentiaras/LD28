@@ -1,0 +1,59 @@
+<project name="LD28" default="init" basedir=".">
+
+	<property name="src" location="src/"/>
+	<property name="res" location="res/"/>
+	<property name="build" location="temp/"/>
+	<property name="lwjgl" location="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl-2.9.0/"/>
+	<property name="slick" location="C:/Users/martin/JavaDevelopment/APIs/slick"/>
+	
+	<target name="init">
+	
+		<tstamp/>
+		
+		<mkdir dir="${build}"/>
+		
+		<antcall target="copy"/>
+		<antcall target="comp"/>
+		<antcall target="clean"/>
+		
+	</target>
+	
+	<target name="copy">
+	
+		<mkdir dir="${build}/source"/>
+		<mkdir dir="${build}/libraries/natives"/>
+		
+		<copy todir="${build}/source">
+			<fileset dir="${src}"/>
+			<fileset dir="${res}"/>
+		</copy>
+		
+		<copy file="${lwjgl}/jar/lwjgl.jar" todir="${build}/libraries"/>
+		<copy file="${lwjgl}/jar/lwjgl_util.jar" todir="${build}/libraries"/>
+		<copy file="${slick}/lib/slick.jar" todir="${build}/libraries"/>
+		
+		<copy todir="${build}/libraries/natives">
+			<fileset dir="${lwjgl}/native/windows"/>
+			<fileset dir="${lwjgl}/native/macosx"/>
+			<fileset dir="${lwjgl}/native/linux"/>
+		</copy>
+		
+	</target>
+	
+	<target name="comp">
+	
+		<jar jarfile="${build}/LD-28-${DSTAMP}.jar" basedir="${build}/source"/>
+		
+		<exec dir="D:/Användare/martin/Desktop" executable="cmd.exe">
+			<arg value="/c java -jar jarsplice-0.40.jar"/>
+		</exec>
+		
+	</target>
+	
+	<target name="clean">
+		
+		<delete dir="${build}"/>
+		
+	</target>
+	
+</project>

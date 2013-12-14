@@ -48,24 +48,7 @@ public class MainMenu extends Menu {
 	@Override
 	public void render() {
 		
-		RenderUtil.renderLogo(200, 0);
-		
-		for (int i = 0; i < getObjectCount(); i++) {
-			
-			String s = getObject(i);
-			
-			boolean selected = i == getSelectedIndex();
-			
-			if (i == getSelectedIndex()) {
-				
-				s = "< " + s + " >";
-				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s, SELECTED_COLOR);
-			}
-			else {
-				
-				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s);
-			}
-		}
+		RenderUtil.renderStandardMenu(this);
 		
 		FontRenderer.drawString(10, GLSettings.HEIGHT - 20, "use <W> and <S> to navigate. <ENTER> to select.");
 		FontRenderer.drawString(10, GLSettings.HEIGHT - 40, "Copyright 2013 Martin Jirlow");

@@ -7,6 +7,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import com.ld28.audio.SoundSystem;
 import com.ld28.base.GLSettings;
 import com.ld28.controls.Controls;
 import com.ld28.controls.GameControls;
@@ -44,8 +45,10 @@ public class GameHandler {
 		GLSettings.initGL();
 		
 		loadTextures();
+		loadAudio();
 		LevelLoader.loadLevels(this);
 		
+		SoundSystem.initAL();
 		FontRenderer.init();
 		
 		enterMenu(new MainMenu(this));
@@ -102,6 +105,11 @@ public class GameHandler {
 		
 		TextureLibrary.loadAndSubdivide("textures/level/tileset.png", 16, 16, 16, 16);
 		TextureLibrary.loadAndSubdivide("textures/player/player.png", 1, 8, 16, 16);
+	}
+	
+	private void loadAudio() {
+		
+		
 	}
 	
 	public void addEntity(Entity entity) {

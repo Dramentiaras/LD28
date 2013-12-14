@@ -2,6 +2,8 @@ package com.ld28.render;
 
 import org.lwjgl.opengl.GL11;
 
+import com.ld28.base.GLSettings;
+import com.ld28.menu.Menu;
 import com.ld28.texture.TextureLibrary;
 
 public class RenderUtil {
@@ -32,5 +34,25 @@ public class RenderUtil {
 			GL11.glEnd();
 		}
 		GL11.glPopMatrix();
+	}
+	
+	public static void renderStandardMenu(Menu menu) {
+		
+		RenderUtil.renderLogo(200, 0);
+		
+		for (int i = 0; i < menu.getObjectCount(); i++) {
+			
+			String s = menu.getObject(i);
+			
+			if (i == menu.getSelectedIndex()) {
+				
+				s = "< " + s + " >";
+				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s, Menu.SELECTED_COLOR);
+			}
+			else {
+				
+				FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(s) / 2, GLSettings.HEIGHT / 2 + 50 * i, s);
+			}
+		}
 	}
 }
