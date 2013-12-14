@@ -12,7 +12,7 @@ public class LevelLoader {
 	public static void loadLevels(GameHandler game) {
 		
 		Level level = new Level(50, 38, game);
-		level.setTileAt(48, 19, Tile.doorOpen.id);
+		level.setTileAt(47, 19, Tile.doorOpen.id);
 		
 		level.setBlock(1, 1, 49, 18, 1);
 		level.setBlock(1, 21, 49, 38, 1);

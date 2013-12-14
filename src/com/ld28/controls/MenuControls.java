@@ -41,7 +41,7 @@ public class MenuControls implements Controls {
 			}
 		}
 		
-		if (Input.isKeyPressed(Keyboard.KEY_SPACE)) {
+		if (Input.isKeyPressed(Keyboard.KEY_RETURN)) {
 			
 			menu.triggerIndex(menu.getSelectedIndex());
 		}

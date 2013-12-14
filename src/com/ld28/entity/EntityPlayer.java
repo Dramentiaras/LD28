@@ -2,7 +2,6 @@ package com.ld28.entity;
 
 import com.ld28.handler.GameHandler;
 import com.ld28.level.Level;
-import com.ld28.texture.TextureLibrary;
 import com.ld28.tile.Tile;
 
 public class EntityPlayer extends Entity {
@@ -155,6 +154,10 @@ public class EntityPlayer extends Entity {
 		if (id == Tile.wall.id) {
 			
 			game.resetLevel();
+		}
+		if (id == Tile.doorOpen.id) {
+			
+			game.nextLevel();
 		}
 	}
 }

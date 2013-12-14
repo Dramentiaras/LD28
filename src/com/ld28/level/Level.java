@@ -20,6 +20,8 @@ public class Level {
 	public float gravity = .2f;
 	private int width, height;
 	
+	private boolean[] keys = new boolean[256];
+	
 	private int playerXSpawn;
 	private int playerYSpawn;
 
@@ -107,7 +109,7 @@ public class Level {
 						GL11.glTranslatef(x * Tile.SIZE + xOffset, y * Tile.SIZE + yOffset, 0);
 						
 						GL11.glColor3f(1f, 1f, 1f);
-						Tile.tiles[level[x][y]].getTileRenderer().render();
+						Tile.tiles[level[x][y]].getTileRenderer().render(this, x, y);
 					}
 					GL11.glPopMatrix();
 				}
@@ -149,5 +151,20 @@ public class Level {
 				}
 			}
 		}
+	}
+	
+	public boolean isKeyPressed(int key) {
+		
+		return keys[key];
+	}
+	
+	public void setKeyPressed(int key) {
+		
+		keys[key] = true;
+	}
+	
+	public void reset() {
+		
+		keys = new boolean[256];
 	}
 }

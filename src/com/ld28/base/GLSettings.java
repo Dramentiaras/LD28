@@ -12,7 +12,7 @@ public class GLSettings {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		
-		GL11.glClearColor(.25f, .25f, .25f, 0f);
+		GL11.glClearColor(.35f, .35f, .35f, 0f);
 		
 		WIDTH = Display.getWidth();
 		HEIGHT = Display.getHeight();

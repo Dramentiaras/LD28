@@ -52,7 +52,6 @@ public class TextureLibrary {
 					BufferedImage img = image.getSubimage(x * width, y * height, width, height);
 					
 					textures.put(name + ":" + (y * cols + x), BufferedImageUtil.getTexture(path, img));
-					System.out.println("Loaded: " + name + ":" + (y * cols + x));
 				}
 			}
 			

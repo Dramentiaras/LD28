@@ -2,6 +2,8 @@ package com.ld28.menu;
 
 import java.util.HashMap;
 
+import org.newdawn.slick.Color;
+
 import com.ld28.controls.MenuControls;
 import com.ld28.handler.GameHandler;
 
@@ -12,9 +14,15 @@ public class Menu {
 	private int selObj = 0;
 	private int objects = -1;
 	
+	public static final Color SELECTED_COLOR = new Color(0f, .9f, 0f);
+	
 	public Menu(GameHandler game) {
 		
 		this.game = game;
+	}
+	
+	public void takeControl() {
+		
 		game.setControls(new MenuControls(this));
 	}
 	
@@ -33,6 +41,11 @@ public class Menu {
 		if (obj > objects) obj = objects;
 		
 		selObj = obj;
+	}
+	
+	public boolean shouldRenderGame() {
+		
+		return false;
 	}
 	
 	public int getSelectedIndex() {
