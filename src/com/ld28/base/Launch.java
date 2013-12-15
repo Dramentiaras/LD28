@@ -15,6 +15,7 @@ public class Launch {
 		try {
 			
 			Display.setDisplayMode(new DisplayMode(800, 608));
+			Display.setTitle("4 Directions");
 			
 			Display.create();
 			Mouse.create();
