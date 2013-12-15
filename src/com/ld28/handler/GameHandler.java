@@ -60,16 +60,13 @@ public class GameHandler {
 		ticksTransComplete = 180;
 		FontRenderer.init();
 		
-		transition(new MainMenu(this));
-		
-		update();	
-		render();
-		
 		loadTextures();
 		loadAudio();
 		LevelLoader.loadLevels(this);
 		
 		SoundSystem.initAL();
+		
+		transition(new MainMenu(this));
 		
 		SoundSystem.loop("soundtrack1");
 		
@@ -242,6 +239,11 @@ public class GameHandler {
 		}
 	}
 	
+	public int getCurrentLevel() {
+		
+		return curLevel;
+	}
+	
 	public void update() {
 		
 		if (!transitioning) {
@@ -339,7 +341,7 @@ public class GameHandler {
 				
 				setLevel(lvl);
 				
-				transitioningMessage = "Level " + (curLevel + 1) + " - " + level.name;
+				transitioningMessage = (curLevel != 6 ? "Level " + (curLevel + 1) + " - ":"") + level.name;
 				
 				level.reset();
 				level.spawnPlayer();
@@ -353,7 +355,7 @@ public class GameHandler {
 			state = INGAME;
 			
 			menu = null;
-			curLevel = 3;
+			curLevel = 0;
 			
 			entities = new ArrayList<Entity>();
 			removals = new ArrayList<Entity>();

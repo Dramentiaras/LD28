@@ -34,6 +34,8 @@ public class Level {
 	
 	private ArrayList<int[]> patrols = new ArrayList<int[]>();
 	private ArrayList<int[]> powerups = new ArrayList<int[]>();
+	private ArrayList<Boolean> powerupsDisable = new ArrayList<Boolean>();
+	private ArrayList<Integer> disableKeys = new ArrayList<Integer>();
 	
 	public Level(int width, int height, GameHandler game) {
 		
@@ -77,6 +79,13 @@ public class Level {
 	public void addPowerup(int type, int x, int y) {
 		
 		powerups.add(new int[] {type, x, y});
+		powerupsDisable.add(false);
+	}
+	
+	public void addPowerup(int type, int x, int y, boolean disable) {
+		
+		powerups.add(new int[] {type, x, y});
+		powerupsDisable.add(false);
 	}
 	
 	private void deployPatrols() {
@@ -100,9 +109,11 @@ public class Level {
 	
 	private void deployPowerups() {
 		
-		for (int[] i : powerups) {
+		for (int j = 0; j < powerups.size(); j++) {
 			
-			EntityPowerup powerup = new EntityPowerup(i[0], i[1] * Tile.SIZE + Tile.SIZE / 2, i[2] * Tile.SIZE + Tile.SIZE / 2, game);
+			int[] i = powerups.get(j);
+			
+			EntityPowerup powerup = new EntityPowerup(i[0], i[1] * Tile.SIZE + Tile.SIZE / 2, i[2] * Tile.SIZE + Tile.SIZE / 2, powerupsDisable.get(j), game);
 			game.addEntity(powerup);
 		}
 	}
@@ -166,7 +177,7 @@ public class Level {
 			GL11.glPushMatrix();
 			{
 				
-				GL11.glTranslatef(GLSettings.WIDTH / 2 - 54 + i * 32, GLSettings.HEIGHT - 32, 0);
+				GL11.glTranslatef(GLSettings.WIDTH / 2 - 54 + i * 32, GLSettings.HEIGHT - 16, 0);
 				
 				switch (i) {
 				
@@ -276,6 +287,11 @@ public class Level {
 		}
 	}
 	
+	public void startWithKeyDisabled(int key) {
+		
+		disableKeys.add(key);
+	}
+	
 	public void load() {
 		
 		for (int x = 0; x < level.length; x++) {
@@ -311,7 +327,12 @@ public class Level {
 	public void reset() {
 		
 		keys = new boolean[256];
-		deployPatrols();
 		deployPowerups();
+		deployPatrols();
+		
+		for (int i : disableKeys) {
+			
+			setKeyPressed(i);
+		}
 	}
 }

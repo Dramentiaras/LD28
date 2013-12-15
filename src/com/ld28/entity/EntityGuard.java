@@ -248,8 +248,6 @@ public class EntityGuard extends EntityHuman {
 	
 	@Override
 	public void onEntityCollision(Entity entity) {
-			
-		System.out.println(entity);
 		
 		if (entity instanceof EntityPlayer) {
 			

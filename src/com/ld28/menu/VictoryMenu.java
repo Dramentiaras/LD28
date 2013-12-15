@@ -102,11 +102,13 @@ public class VictoryMenu extends Menu {
 		
 		String message = "Congratulations, you completed 4 Directions!";
 		
-		String message2 = "This was created for the";
+		String message2 = "This was created by Martin Jirlow for the";
 		String message3 = "28:th Ludum Dare 48h compo";
+		String message4 = "www.ludumdare.com";
 		
 		FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(message) / 2, 250, message);
 		FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(message2) / 2, 310, message2);
 		FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(message3) / 2, 345, message3);
+		FontRenderer.drawString(GLSettings.WIDTH / 2 - FontRenderer.getStringWidth(message4) / 2, 380, message4);
 	}
 }

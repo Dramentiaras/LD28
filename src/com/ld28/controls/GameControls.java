@@ -6,6 +6,7 @@ import com.ld28.entity.EntityPlayer;
 import com.ld28.handler.GameHandler;
 import com.ld28.input.Input;
 import com.ld28.menu.PauseMenu;
+import com.ld28.tile.Tile;
 
 public class GameControls implements Controls {
 
@@ -46,6 +47,18 @@ public class GameControls implements Controls {
 			
 			game.player.accelerateYTo(0);
 			game.player.accelerateXTo(0);
+		}
+		
+		if (Input.isKeyDown(Keyboard.KEY_LSHIFT) && game.getCurrentLevel() == 6) {
+			
+			if (Input.isKeyDown(Keyboard.KEY_LCONTROL)) {
+				if (Input.isKeyDown(Keyboard.KEY_TAB)) {
+					if (Input.isKeyPressed(Keyboard.KEY_T)) {
+						
+						game.player.x = 24 * Tile.SIZE + Tile.SIZE / 2;
+					}
+				}
+			}
 		}
 		
 		if (Input.isKeyPressed(Keyboard.KEY_ESCAPE)) {

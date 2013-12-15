@@ -19,6 +19,7 @@ public class PauseMenu extends Menu {
 		
 		addMenuObject("resume");
 		addMenuObject("restart");
+		addMenuObject("skip level");
 		addMenuObject("instructions");
 		addMenuObject("options");
 		addMenuObject("main menu");
@@ -62,6 +63,12 @@ public class PauseMenu extends Menu {
 		if (getObject(index) == "instructions") {
 			
 			game.enterMenu(instructions);
+		}
+		
+		if (getObject(index) == "skip level") {
+			
+			game.enterMenu(null);
+			game.nextLevel();
 		}
 	}
 	

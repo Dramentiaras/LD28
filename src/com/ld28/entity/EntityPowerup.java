@@ -10,17 +10,25 @@ public class EntityPowerup extends Entity {
 	
 	private int type;
 	private boolean activated = false;
+	private boolean disable;
 	
 	public EntityPowerup(int type, float x, float y, GameHandler game) {
+	
+		this(type, x, y, false, game);
+	}
+	
+	public EntityPowerup(int type, float x, float y, boolean disable, GameHandler game) {
 		
 		super(x, y, game);
 		this.type = type;
+		
+		colWidth = colHeight = 12f;
 		
 		getEntityRenderer().setTextured(true);
 		getEntityRenderer().setSubdivided(true);
 		getEntityRenderer().setTextureName("assets");
 		
-		getEntityRenderer().frame = type == SPACE ? 46:48;
+		getEntityRenderer().frame = type == SPACE ? (disable ? 47:46):(disable ? 50:48);
 	}
 	
 	@Override
@@ -59,27 +67,62 @@ public class EntityPowerup extends Entity {
 		
 			case RIGHT: {
 				
-				game.level.resetPressedKey(Keyboard.KEY_D);
+				if (!disable) {
+					
+					game.level.resetPressedKey(Keyboard.KEY_D);
+				}
+				else {
+					
+					game.level.setKeyPressed(Keyboard.KEY_D);
+				}
 				break;
 			}
 			case DOWN: {
 				
-				game.level.resetPressedKey(Keyboard.KEY_S);
+				if (!disable) {
+					
+					game.level.resetPressedKey(Keyboard.KEY_S);
+				}
+				else {
+					
+					game.level.setKeyPressed(Keyboard.KEY_S);
+				}
 				break;
 			}
 			case LEFT: {
 				
-				game.level.resetPressedKey(Keyboard.KEY_A);
+				if (!disable) {
+					
+					game.level.resetPressedKey(Keyboard.KEY_A);
+				}
+				else {
+					
+					game.level.setKeyPressed(Keyboard.KEY_A);
+				}
 				break;
 			}
 			case UP: {
 				
-				game.level.resetPressedKey(Keyboard.KEY_W);
+				if (!disable) {
+					
+					game.level.resetPressedKey(Keyboard.KEY_W);
+				}
+				else {
+					
+					game.level.setKeyPressed(Keyboard.KEY_W);
+				}
 				break;
 			}
 			case SPACE: {
 				
-				game.level.resetPressedKey(Keyboard.KEY_SPACE);
+				if (!disable) {
+					
+					game.level.resetPressedKey(Keyboard.KEY_SPACE);
+				}
+				else {
+					
+					game.level.setKeyPressed(Keyboard.KEY_SPACE);
+				}
 				break;
 			}
 		}

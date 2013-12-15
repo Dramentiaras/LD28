@@ -114,7 +114,6 @@ public class SoundSystem {
 		for (int i = 0; i < SOUNDS_COUNT; i++) {
 			
 			AL10.alSourcei(sources.get(i), AL10.AL_BUFFER, buffers.get(i));
-			AL10.alSourcef(sources.get(i), AL10.AL_GAIN, 1.0f);
 			AL10.alSourcef(sources.get(i), AL10.AL_PITCH, 1.0f);
 			AL10.alSource(sources.get(i), AL10.AL_POSITION, (FloatBuffer) sourcePos.position(i * 3));
 			AL10.alSource(sources.get(i), AL10.AL_VELOCITY, (FloatBuffer) sourceVel.position(i * 3));
@@ -124,6 +123,10 @@ public class SoundSystem {
 				System.err.println("Error in AL initialization: " + 1);
 			}
 		}
+		
+		AL10.alListener(AL10.AL_POSITION, listenerPos);
+		AL10.alListener(AL10.AL_VELOCITY, listenerVel);
+		AL10.alListener(AL10.AL_ORIENTATION, listenerOri);
 		
 		initiated = true;
 	}
@@ -135,6 +138,7 @@ public class SoundSystem {
 		int id = ids.get(sound);
 		
 		AL10.alSourcei(sources.get(id), AL10.AL_LOOPING, AL10.AL_FALSE);
+		AL10.alSourcef(sources.get(id), AL10.AL_GAIN, 1f);
 		AL10.alSourcePlay(sources.get(id));
 	}
 	
@@ -162,6 +166,7 @@ public class SoundSystem {
 		int id = ids.get(sound);
 		
 		AL10.alSourcei(sources.get(id), AL10.AL_LOOPING, AL10.AL_TRUE);
+		AL10.alSourcef(sources.get(id), AL10.AL_GAIN, .15f);
 		AL10.alSourcePlay(sources.get(id));
 	}
 	
