@@ -94,7 +94,11 @@ public class EntityHuman extends Entity {
 		
 		int frame = getEntityRenderer().frame;
 		
-		if (motionX != 0 || motionY != 0) {
+		if (isDead()) {
+			
+			getEntityRenderer().frame = baseFrame + 3;
+		}
+		else if (motionX != 0 || motionY != 0) {
 			
 			if (animateTicks > 15 || frame == 0 && animateTicks > 5) {
 					
@@ -128,10 +132,6 @@ public class EntityHuman extends Entity {
 					
 				animateTicks = 0;
 			}
-		}
-		else if (isDead()) {
-			
-			getEntityRenderer().frame = baseFrame + 3;
 		}
 		else {
 			

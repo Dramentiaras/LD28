@@ -57,15 +57,21 @@ public class GameHandler {
 		
 		pane1 = GLSettings.WIDTH / 2 + 4;
 		pane2 = GLSettings.WIDTH / 2 + 4;
+		ticksTransComplete = 180;
+		FontRenderer.init();
+		
+		transition(new MainMenu(this));
+		
+		update();	
+		render();
 		
 		loadTextures();
 		loadAudio();
 		LevelLoader.loadLevels(this);
 		
 		SoundSystem.initAL();
-		FontRenderer.init();
 		
-		transition(new MainMenu(this));
+		SoundSystem.loop("soundtrack1");
 		
 		loop();
 		
@@ -139,6 +145,7 @@ public class GameHandler {
 		SoundSystem.load("sounds/player/laser.wav");
 		SoundSystem.load("sounds/player/laser_hit.wav");
 		SoundSystem.load("sounds/guard/guard_death.wav");
+		SoundSystem.load("sounds/tracks/soundtrack1.wav");
 	}
 	
 	public void addEntity(Entity entity) {

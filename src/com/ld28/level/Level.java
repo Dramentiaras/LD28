@@ -174,11 +174,11 @@ public class Level {
 						
 						if (keys[Keyboard.KEY_A] == true) {
 							
-							GL11.glColor4f(1f, 1f, 1f, .45f);
+							GL11.glColor4f(1f, 1f, 1f, .35f);
 						}
 						else {
 							
-							GL11.glColor4f(1f, 1f, 1f, .75f);
+							GL11.glColor4f(1f, 1f, 1f, 1f);
 						}
 						
 						TextureLibrary.bind("assets:14");
@@ -230,14 +230,14 @@ public class Level {
 						
 						if (keys[Keyboard.KEY_SPACE] == true) {
 							
-							GL11.glColor4f(1f, 1f, 1f, .35f);
+							GL11.glColor4f(1f, 1f, 1f, 1f);
+							TextureLibrary.bind("assets:47");
 						}
 						else {
 							
 							GL11.glColor4f(1f, 1f, 1f, 1f);
+							TextureLibrary.bind("assets:46");
 						}
-						
-						TextureLibrary.bind("assets:47");
 						break;
 					}
 				}

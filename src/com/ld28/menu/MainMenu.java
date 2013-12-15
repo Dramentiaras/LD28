@@ -14,10 +14,14 @@ public class MainMenu extends Menu {
 	private InfoMenu instructions;
 	private InfoMenu credits;
 	private OptionMenu options;
+	private float bgPane1 = 0;
+	private float bgPane2;
 	
 	public MainMenu(GameHandler game) {
 		
 		super(game);
+		
+		bgPane2 = -GLSettings.WIDTH;
 		
 		addMenuObject("start");
 		addMenuObject("instructions");

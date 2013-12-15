@@ -152,7 +152,7 @@ public class EntityPlayer extends EntityHuman {
 					motionY = 0;
 				}
 			}
-			if (id == Tile.doorOpen.id) {
+			if (id == Tile.door.id) {
 				
 				game.nextLevel();
 			}

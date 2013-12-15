@@ -73,7 +73,7 @@ public class PauseMenu extends Menu {
 		
 			GL11.glTranslatef(150, 0, 0);
 			
-			GL11.glColor3f(.35f, .35f, .35f);
+			GL11.glColor3f(.40f, .35f, .35f);
 			
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			

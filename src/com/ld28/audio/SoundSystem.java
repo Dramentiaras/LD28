@@ -68,6 +68,7 @@ public class SoundSystem {
 		catch(Exception ex) {
 			
 			ex.printStackTrace();
+			System.exit(0);
 		}
 		
 		listenerPos.flip();

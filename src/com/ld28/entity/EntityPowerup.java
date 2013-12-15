@@ -20,7 +20,7 @@ public class EntityPowerup extends Entity {
 		getEntityRenderer().setSubdivided(true);
 		getEntityRenderer().setTextureName("assets");
 		
-		getEntityRenderer().frame = type == SPACE ? 50:48;
+		getEntityRenderer().frame = type == SPACE ? 46:48;
 	}
 	
 	@Override

@@ -29,7 +29,16 @@ public class OptionMenu extends Menu {
 		else if (getObject(index).startsWith("music")) {
 			
 			Settings.MUSIC_MUTED = !Settings.MUSIC_MUTED;
-			SoundSystem.stopAll();
+			
+			if (Settings.MUSIC_MUTED) {
+				
+				SoundSystem.stop("soundtrack1");
+			}
+			else {
+				
+				SoundSystem.loop("soundtrack1");
+			}
+			
 			changeMenuObject(index, "music: " + (Settings.MUSIC_MUTED ? "off":"on"));
 		}
 		else if (getObject(index) == "back") {

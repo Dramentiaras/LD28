@@ -30,7 +30,7 @@ public class VictoryMenu extends Menu {
 		GL11.glPushMatrix();
 		{
 			
-			GL11.glColor3f(0f, 0f, 0f);
+			GL11.glColor3f(.40f, .35f, .35f);
 			
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			

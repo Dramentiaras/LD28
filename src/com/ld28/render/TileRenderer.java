@@ -13,10 +13,22 @@ public class TileRenderer {
 	private Tile tile;
 	private Random random = new Random();
 	private int rand;
+	private boolean bordered = false;
+	private int borderIndex;
 	
 	public TileRenderer(Tile tile) {
 		
 		this.tile = tile;
+	}
+	
+	public void setBorderIndex(int index) {
+		
+		borderIndex = index;
+	}
+	
+	public void setBordered(boolean bordered) {
+		
+		this.bordered = bordered;
 	}
 	
 	public void render(Level level, int x, int y) {
@@ -26,11 +38,11 @@ public class TileRenderer {
 		random.setSeed(x * y + 303 * 7);
 		rand = random.nextInt(100);
 		
-		if (rand >= 50) {
+		if (rand >= 20) {
 			
 			rand = 0;
 		}
-		else if (rand >= 25) {
+		else if  (rand >= 10) {
 			
 			rand = 1;
 		}
@@ -46,7 +58,7 @@ public class TileRenderer {
 		
 		TextureLibrary.bind(Tile.TILESET + ":" + tile.index);
 		
-		if (tile.id == Tile.wall.id) {
+		if (bordered) {
 			
 			if (x < 49 && level.getTileAt(x + 1, y) != tile.id) {
 				
@@ -80,7 +92,7 @@ public class TileRenderer {
 		}
 		GL11.glEnd();
 		
-		if (tile.id == Tile.wall.id) {
+		if (bordered) {
 			
 			boolean randUsed = false;
 			
@@ -90,9 +102,9 @@ public class TileRenderer {
 				
 				if (overlay[i]) {
 					
-					int index = 16;
+					int index = borderIndex;
 					
-					if (!randUsed) {
+					if (!randUsed && tile.id == Tile.wall.id) {
 						
 						index += rand;
 						randUsed = true;

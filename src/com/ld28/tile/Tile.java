@@ -1,7 +1,5 @@
 package com.ld28.tile;
 
-import java.util.ArrayList;
-
 import com.ld28.render.TileRenderer;
 
 public class Tile {
@@ -11,10 +9,11 @@ public class Tile {
 	public static final int SIZE = 16;
 	public static final String TILESET = "assets";
 	
-	public static final Tile floor = new Tile(0, 3).setShouldRender(false).setObstacle(false);
-	public static final Tile wall = new Tile(1, 0).setObstacle(true);
-	public static final Tile doorClosed = new Tile(2, 1).setObstacle(false);
-	public static final Tile doorOpen = new Tile(3, 2).setObstacle(false);
+	public static final Tile floor = new Tile(0, 1).setObstacle(false);
+	public static final Tile wall = new Tile(1, 0).setBorder(16, true);
+	public static final Tile carpet = new Tile(2, 3).setObstacle(false).setBorder(19, true);
+	public static final Tile door = new Tile(3, 2).setObstacle(false);
+	
 	
 	public int id, index;
 	private TileRenderer renderer;
@@ -70,5 +69,12 @@ public class Tile {
 	public boolean isObstacle() {
 		
 		return obstacle;
+	}
+	
+	public Tile setBorder(int index, boolean bordered) {
+		
+		getTileRenderer().setBordered(bordered);
+		getTileRenderer().setBorderIndex(index);
+		return this;
 	}
 }

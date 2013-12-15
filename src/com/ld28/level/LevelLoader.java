@@ -16,7 +16,7 @@ public class LevelLoader {
 		
 		level.name = "Humble Beginnings";
 		
-		level.setTileAt(47, 19, Tile.doorOpen.id);
+		level.setTileAt(47, 19, Tile.door.id);
 		
 		level.setBlock(1, 1, 49, 18, 1);
 		level.setBlock(1, 21, 49, 38, 1);
@@ -30,7 +30,7 @@ public class LevelLoader {
 		level.name = "Square";
 		
 		level.setSpawnPoint(47, 2);
-		level.setTileAt(47, 6, Tile.doorOpen.id);
+		level.setTileAt(47, 6, Tile.door.id);
 		
 		level.setBlock(1, 1, 46, 2, Tile.wall.id);
 		level.setBlock(1, 2, 2, 37, Tile.wall.id);
@@ -52,7 +52,7 @@ public class LevelLoader {
 		level.name = "Well Guarded";
 		
 		level.setSpawnPoint(47, 2);
-		level.setTileAt(47, 24, Tile.doorOpen.id);
+		level.setTileAt(47, 24, Tile.door.id);
 		
 		level.setBlock(1, 1, 46, 2, Tile.wall.id);
 		level.setBlock(1, 2, 2, 25, Tile.wall.id);
@@ -79,14 +79,14 @@ public class LevelLoader {
 		level.setBlock(2, 25, 36, 26, Tile.floor.id);
 		level.setBlock(35, 25, 36, 33, Tile.floor.id);
 		level.setBlock(9, 26, 10, 35, Tile.floor.id);
-		level.setBlock(10, 34, 38, 35, Tile.floor.id);
+		level.setBlock(10, 34, 38, 35, Tile.carpet.id);
 		level.setBlock(37, 26, 38, 35, Tile.floor.id);
 		level.setBlock(37, 25, 48, 26, Tile.floor.id);
 		level.setBlock(47, 11, 48, 25, Tile.floor.id);
 		
 		level.setSpawnPoint(25, 34);
-		level.setTileAt(47, 10, Tile.doorOpen.id);
-		level.setTileAt(2, 10, Tile.doorOpen.id);
+		level.setTileAt(47, 10, Tile.door.id);
+		level.setTileAt(2, 10, Tile.door.id);
 		
 		level.addPowerup(EntityPowerup.LEFT, 35, 32);
 		level.addPowerup(EntityPowerup.UP, 2, 25);

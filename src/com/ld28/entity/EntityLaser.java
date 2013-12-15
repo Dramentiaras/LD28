@@ -56,5 +56,10 @@ public class EntityLaser extends Entity {
 			game.flagForRemoval(this);
 			SoundSystem.play("laser_hit");
 		}
+		
+		if (entity instanceof EntityGuard && !((EntityGuard) entity).isDead()) {
+			
+			((EntityGuard) entity).die();
+		}
 	}
 }
