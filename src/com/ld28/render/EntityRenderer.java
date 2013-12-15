@@ -15,6 +15,7 @@ public class EntityRenderer {
 	private float rotation;
 	private boolean textured = false;
 	private boolean subdivided = false;
+	private boolean render = true;
 	private String name = "";
 	
 	private boolean xFlip, yFlip;
@@ -27,6 +28,8 @@ public class EntityRenderer {
 	}
 	
 	public void render() {
+		
+		if (!render) return;
 		
 		GL11.glPushMatrix();
 		{
@@ -157,5 +160,15 @@ public class EntityRenderer {
 	public float getScaleY() {
 		
 		return yScale;
+	}
+	
+	public boolean shouldRender() {
+		
+		return render;
+	}
+	
+	public void setShouldRender(boolean render) {
+		
+		this.render = render;
 	}
 }

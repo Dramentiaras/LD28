@@ -14,10 +14,12 @@ public class EntityPlayer extends EntityHuman {
 	private boolean firing = false;
 	private int ticksDead;
 	private int ticksFiring;
+	private int ticksFlicker;
 	
 	public EntityPlayer(float x, float y, GameHandler game) {
 		
 		super(x, y, game);
+		getEntityRenderer().frame = baseFrame;
 	}
 	
 	@Override
@@ -27,7 +29,16 @@ public class EntityPlayer extends EntityHuman {
 		
 		if (isDead()) {
 			
-			motionX = motionY = 0;
+			if (ticksDead > 30) {
+				
+				if (ticksFlicker >= 30) {
+					
+					getEntityRenderer().setShouldRender(!getEntityRenderer().shouldRender());
+					ticksFlicker = 0;
+				}
+				
+				ticksFlicker++;
+			}
 			
 			if (ticksDead > 120) {
 				
@@ -55,11 +66,6 @@ public class EntityPlayer extends EntityHuman {
 		
 		super.animate();
 		
-		if (isDead()) {
-			
-			getEntityRenderer().frame = baseFrame + 3;
-		}
-		
 		if (firing) {
 			
 			getEntityRenderer().frame = baseFrame + 2;
@@ -79,11 +85,11 @@ public class EntityPlayer extends EntityHuman {
 		
 		if (rot == 0 || rot == 180) {
 			
-			laser = new EntityLaser(0, 0, (rot == 0 ? 8f:-8f), 0f, game);
+			laser = new EntityLaser(0, 0, (rot == 0 ? 8f:-8f), 0f, this, game);
 		}
 		else {
 			
-			laser = new EntityLaser(0, 0, 0f, (rot == 90 ? 8f:-8f), game);
+			laser = new EntityLaser(0, 0, 0f, (rot == 90 ? 8f:-8f), this, game);
 		}
 		
 		if (rot == 0) {

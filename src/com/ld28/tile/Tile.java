@@ -9,9 +9,9 @@ public class Tile {
 	public static Tile[] tiles = new Tile[256];
 	
 	public static final int SIZE = 16;
-	public static final String TILESET = "tileset";
+	public static final String TILESET = "assets";
 	
-	public static final Tile air = new Tile(0, 0).setShouldRender(false).setObstacle(false);
+	public static final Tile floor = new Tile(0, 3).setShouldRender(false).setObstacle(false);
 	public static final Tile wall = new Tile(1, 0).setObstacle(true);
 	public static final Tile doorClosed = new Tile(2, 1).setObstacle(false);
 	public static final Tile doorOpen = new Tile(3, 2).setObstacle(false);

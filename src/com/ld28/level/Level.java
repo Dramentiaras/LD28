@@ -2,22 +2,24 @@ package com.ld28.level;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 
 import com.ld28.base.GLSettings;
 import com.ld28.entity.Entity;
 import com.ld28.entity.EntityGuard;
 import com.ld28.entity.EntityPlayer;
+import com.ld28.entity.EntityPowerup;
 import com.ld28.handler.GameHandler;
 import com.ld28.physics.Collision;
+import com.ld28.texture.TextureLibrary;
 import com.ld28.tile.Tile;
 
 public class Level {
 	
 	private GameHandler game;
-	private Random random;
 	private int[][] level;
 	public float gravity = .2f;
 	private int width, height;
@@ -28,13 +30,14 @@ public class Level {
 	private int playerYSpawn;
 
 	public float xOffset, yOffset;
+	public String name = "";
 	
 	private ArrayList<int[]> patrols = new ArrayList<int[]>();
+	private ArrayList<int[]> powerups = new ArrayList<int[]>();
 	
 	public Level(int width, int height, GameHandler game) {
 		
 		this.game = game;
-		random = new Random();
 		
 		this.width = width;
 		this.height = height;
@@ -45,7 +48,7 @@ public class Level {
 	
 	public void spawnPlayer() {
 		
-		game.player = new EntityPlayer(playerXSpawn * Tile.SIZE + 8, playerYSpawn * Tile.SIZE + 8, game);
+		game.player = new EntityPlayer(playerXSpawn * Tile.SIZE + Tile.SIZE / 2, playerYSpawn * Tile.SIZE + Tile.SIZE / 2, game);
 		game.addEntity(game.player);
 	}
 	
@@ -71,6 +74,11 @@ public class Level {
 		patrols.add(new int[] {x1, y1, x2, y2});
 	}
 	
+	public void addPowerup(int type, int x, int y) {
+		
+		powerups.add(new int[] {type, x, y});
+	}
+	
 	private void deployPatrols() {
 		
 		for (int[] i : patrols) {
@@ -87,6 +95,15 @@ public class Level {
 			}
 			
 			game.addEntity(guard);
+		}
+	}
+	
+	private void deployPowerups() {
+		
+		for (int[] i : powerups) {
+			
+			EntityPowerup powerup = new EntityPowerup(i[0], i[1] * Tile.SIZE + Tile.SIZE / 2, i[2] * Tile.SIZE + Tile.SIZE / 2, game);
+			game.addEntity(powerup);
 		}
 	}
 	
@@ -143,6 +160,101 @@ public class Level {
 				}
 			}
 		}
+			
+		for (int i = 0; i < 5; i++) {
+			
+			GL11.glPushMatrix();
+			{
+				
+				GL11.glTranslatef(GLSettings.WIDTH / 2 - 54 + i * 32, GLSettings.HEIGHT - 32, 0);
+				
+				switch (i) {
+				
+					case 0: {
+						
+						if (keys[Keyboard.KEY_A] == true) {
+							
+							GL11.glColor4f(1f, 1f, 1f, .45f);
+						}
+						else {
+							
+							GL11.glColor4f(1f, 1f, 1f, .75f);
+						}
+						
+						TextureLibrary.bind("assets:14");
+						break;
+					}
+					case 1: {
+						
+						if (keys[Keyboard.KEY_S] == true) {
+							
+							GL11.glColor4f(1f, 1f, 1f, .35f);
+						}
+						else {
+							
+							GL11.glColor4f(1f, 1f, 1f, 1f);
+						}
+						
+						TextureLibrary.bind("assets:30");
+						break;
+					}
+					case 2: {
+						
+						if (keys[Keyboard.KEY_D] == true) {
+							
+							GL11.glColor4f(1f, 1f, 1f, .35f);
+						}
+						else {
+							
+							GL11.glColor4f(1f, 1f, 1f, 1f);
+						}
+						
+						TextureLibrary.bind("assets:31");
+						break;
+					}
+					case 3: {
+						
+						if (keys[Keyboard.KEY_W] == true) {
+							
+							GL11.glColor4f(1f, 1f, 1f, .35f);
+						}
+						else {
+							
+							GL11.glColor4f(1f, 1f, 1f, 1f);
+						}
+						
+						TextureLibrary.bind("assets:15");
+						break;
+					}
+					case 4: {
+						
+						if (keys[Keyboard.KEY_SPACE] == true) {
+							
+							GL11.glColor4f(1f, 1f, 1f, .35f);
+						}
+						else {
+							
+							GL11.glColor4f(1f, 1f, 1f, 1f);
+						}
+						
+						TextureLibrary.bind("assets:47");
+						break;
+					}
+				}
+				
+				GL11.glBegin(GL11.GL_QUADS);
+				{
+					
+					GL11.glTexCoord2f(1, 0); GL11.glVertex2f(16, 0);
+					GL11.glTexCoord2f(0, 0); GL11.glVertex2f(0, 0);
+					GL11.glTexCoord2f(0, 1); GL11.glVertex2f(0, 16);
+					GL11.glTexCoord2f(1, 1); GL11.glVertex2f(16, 16);
+					
+				}
+				GL11.glEnd();
+			}
+			GL11.glPopMatrix();
+		}
 	}
 	
 	public void update() {
@@ -191,9 +303,15 @@ public class Level {
 		keys[key] = true;
 	}
 	
+	public void resetPressedKey(int key) {
+		
+		keys[key] = false;
+	}
+	
 	public void reset() {
 		
 		keys = new boolean[256];
 		deployPatrols();
+		deployPowerups();
 	}
 }

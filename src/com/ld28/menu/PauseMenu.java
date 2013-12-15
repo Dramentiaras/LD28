@@ -10,14 +10,23 @@ import com.ld28.texture.TextureLibrary;
 
 public class PauseMenu extends Menu {
 
+	private OptionMenu options;
+	private InfoMenu instructions;
+	
 	public PauseMenu(GameHandler game) {
 	
 		super(game);
 		
 		addMenuObject("resume");
 		addMenuObject("restart");
+		addMenuObject("instructions");
 		addMenuObject("options");
 		addMenuObject("main menu");
+		
+		options = new OptionMenu(game, this);
+		instructions = new InfoMenu(game, this);
+		
+		instructions.setText(MenuTexts.getInstructionsText());
 	}
 	
 	@Override
@@ -43,6 +52,16 @@ public class PauseMenu extends Menu {
 			
 			game.resetLevel();
 			game.enterMenu(null);
+		}
+		
+		if (getObject(index) == "options") {
+			
+			game.enterMenu(options);
+		}
+		
+		if (getObject(index) == "instructions") {
+			
+			game.enterMenu(instructions);
 		}
 	}
 	

@@ -33,6 +33,18 @@ public class Menu {
 		menuObjects.put(objects++, object);
 	}
 	
+	public void removeMenuObject(String object) {
+		
+		menuObjects.remove(object);
+		
+		objects -= 1;
+	}
+	
+	public void changeMenuObject(int index, String object) {
+		
+		menuObjects.put(index, object);
+	}
+	
 	public void setSelectedIndex(int obj) {
 		
 		if (objects == -1) return;

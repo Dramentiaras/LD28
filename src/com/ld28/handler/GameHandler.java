@@ -129,8 +129,7 @@ public class GameHandler {
 		
 		TextureLibrary.load("textures/logo.png");
 		
-		TextureLibrary.loadAndSubdivide("textures/level/tileset.png", 16, 16, 16, 16);
-		TextureLibrary.loadAndSubdivide("textures/entity/human.png", 1, 8, 16, 16);
+		TextureLibrary.loadAndSubdivide("textures/assets.png", 16, 16, 16, 16);
 	}
 	
 	private void loadAudio() {
@@ -333,7 +332,7 @@ public class GameHandler {
 				
 				setLevel(lvl);
 				
-				transitioningMessage = "Level " + (curLevel + 1);
+				transitioningMessage = "Level " + (curLevel + 1) + " - " + level.name;
 				
 				level.reset();
 				level.spawnPlayer();
@@ -347,14 +346,14 @@ public class GameHandler {
 			state = INGAME;
 			
 			menu = null;
-			curLevel = 2;
+			curLevel = 3;
 			
 			entities = new ArrayList<Entity>();
 			removals = new ArrayList<Entity>();
 			
 			setLevel(LevelLoader.getLevel(curLevel, this));
 			
-			transitioningMessage = "Level " + (curLevel + 1); 
+			transitioningMessage = "Level " + (curLevel + 1) + " - " + level.name; 
 			
 			level.reset();
 			level.spawnPlayer();
