@@ -1,6 +1,6 @@
 <project name="LD28" default="init" basedir=".">
 
-	<property name="src" location="bin/"/>
+	<property name="src" location="build/classes/"/>
 	<property name="res" location="res/"/>
 	<property name="build" location="temp/"/>
 	<property name="lwjgl" location="C:/Users/martin/JavaDevelopment/APIs/lwjgl/lwjgl-2.9.0/"/>
@@ -23,10 +23,9 @@
 		<mkdir dir="${build}/source"/>
 		<mkdir dir="${build}/libraries/natives"/>
 		
-		<javac srcdir="${src}" destdir="${build}/source"/>
-		
-		<copy todir="${build}/source"
+		<copy todir="${build}/source">
 			<fileset dir="${res}"/>
+			<fileset dir="${src}"/>
 		</copy>
 		
 		<copy file="${lwjgl}/jar/lwjgl.jar" todir="${build}/libraries"/>

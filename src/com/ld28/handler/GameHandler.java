@@ -58,13 +58,14 @@ public class GameHandler {
 		pane1 = GLSettings.WIDTH / 2 + 4;
 		pane2 = GLSettings.WIDTH / 2 + 4;
 		ticksTransComplete = 180;
-		FontRenderer.init();
 		
 		loadTextures();
 		loadAudio();
 		LevelLoader.loadLevels(this);
 		
 		SoundSystem.initAL();
+		
+		FontRenderer.init();
 		
 		transition(new MainMenu(this));
 		

@@ -1,11 +1,13 @@
 package com.ld28.render;
 
 import java.awt.Font;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.font.effects.ShadowEffect;
 
 public class FontRenderer {
 
@@ -17,7 +19,7 @@ public class FontRenderer {
 	public static void init() {
 		try {
 			
-			Font awt = Font.createFont(Font.TRUETYPE_FONT, ClassLoader.getSystemResourceAsStream("fonts/cubica.ttf"));
+			Font awt = Font.createFont(Font.TRUETYPE_FONT, new BufferedInputStream(new FileInputStream(new File("Cubica.ttf"))));
 			
 			font = new UnicodeFont(awt, 20, false, false);
 			font.addAsciiGlyphs();
